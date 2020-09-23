@@ -12,8 +12,10 @@ namespace GeneticSolver
 {
     public partial class Form1 : Form
     {
-        string gen1, gen2;
-        string gamets1 = "", gamets2 = "";
+        List<string> gamets1 = new List<string>();
+        List<string> gamets2 = new List<string>();
+        string gen1 = "", gen2 = "";
+        List<string> allChilds = new List<string>();
         public Form1()
         {
             InitializeComponent();
@@ -22,50 +24,86 @@ namespace GeneticSolver
         private void generateButton_Click(object sender, EventArgs e)
         {
             Generate();
+
         }
         private void Generate()
         {
             listBox1.Items.Clear();
             listView1.Items.Clear();
+            allChilds.Clear();
             gen1 = Gen1.Text;
             gen2 = Gen2.Text;
             ExtractGamets();
-            for (int i = 0; i < (gamets1 != "" ? 1:0); i++)
+            rec(0, "");
+            for (int c = 0; c < allChilds.Count; c++)
             {
-                listView1.Items.Add(gamets1);
-                listView1.Items.Add(gamets2);
-                listBox1.Items.Add(gamets1);
-                listBox1.Items.Add(gamets2);
+                listView1.Items.Add(allChilds[c]);
             }
         }
         void ExtractGamets()
         {
-            gamets1 = "";
-            gamets2 = "";
+            gamets1.Clear();
+            gamets2.Clear();
             try
             {
-                gamets1 += gen1[0];
-                gamets2 += gen2[0];
+                
             }
             catch (IndexOutOfRangeException)
             {
                 MessageBox.Show("WTF?\nEnter Gens");
                 return;
             }
-            for (int i = 1; i < gen1.Length; i++)
+            for (int i = 0; i < gen1.Length; i++)
             {
-                if (gamets1[gamets1.Length - 1] != gen1[i])
+                if (i % 2 == 0)
                 {
-                    gamets1 += gen1[i];
+                    gamets1.Add("");
+                    gamets1[i / 2] += gen1[i];
+                }
+                else if (gamets1[i/2][0] != gen1[i])
+                {
+                    gamets1[i/2] += gen1[i];
                 }
             }
-            for (int i = 1; i < gen2.Length; i++)
+            for (int i = 0; i < gen2.Length; i++)
             {
-                if (gamets2[gamets2.Length - 1] != gen2[i])
+                if (i % 2 == 0)
                 {
-                    gamets2 += gen2[i];
+                    gamets2.Add("");
+                    gamets2[i / 2] += gen2[i];
+                }
+                else if (gamets2[i / 2][0] != gen2[i])
+                {
+                    gamets2[i / 2] += gen2[i];
                 }
             }
+        }
+        void Merge()
+        {
+            
+        }
+        
+        void rec(int index, string s)
+        {
+            if (index >= gamets1.Count)
+            {
+                allChilds.Add(s);
+                return;
+            }
+            rec(index+1,s+gamets1[index][0]+gamets2[index][0]);
+            if (gamets1[index].Length >= 2)
+            {
+                rec(index + 1, s + gamets1[index][1] + gamets2[index][0]);
+            }
+            if (gamets2[index].Length >= 2)
+            {
+                rec(index + 1, s + gamets1[index][0] + gamets2[index][1]);
+            }
+            if (gamets1[index].Length >= 2&& gamets2[index].Length >= 2)
+            {
+                rec(index + 1, s + gamets1[index][1] + gamets2[index][1]);
+            }
+            
         }
     }
 }
