@@ -20,11 +20,14 @@ namespace GeneticSolver
         {
             InitializeComponent();
         }
-
         private void generateButton_Click(object sender, EventArgs e)
         {
             Generate();
-
+        }
+        private void EnterKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                Generate();
         }
         private void Generate()
         {
@@ -34,25 +37,26 @@ namespace GeneticSolver
             gen1 = Gen1.Text;
             gen2 = Gen2.Text;
             ExtractGamets();
-            rec(0, "");
-            for (int c = 0; c < allChilds.Count; c++)
-            {
-                listView1.Items.Add(allChilds[c]);
-            }
-        }
-        void ExtractGamets()
-        {
-            gamets1.Clear();
-            gamets2.Clear();
             try
             {
-                
+                Merge();
             }
             catch (IndexOutOfRangeException)
             {
                 MessageBox.Show("WTF?\nEnter Gens");
                 return;
             }
+            for (int c = 0; c < allChilds.Count; c++)
+            {
+                listView1.Items.Add(allChilds[c]);
+                listBox1.Items.Add(allChilds[c]);
+            }
+        }
+        void ExtractGamets()
+        {
+            gamets1.Clear();
+            gamets2.Clear();
+            
             for (int i = 0; i < gen1.Length; i++)
             {
                 if (i % 2 == 0)
@@ -80,28 +84,36 @@ namespace GeneticSolver
         }
         void Merge()
         {
-            
+            rec(0, "");
         }
-        
         void rec(int index, string s)
         {
+            string temp = "";
             if (index >= gamets1.Count)
             {
                 allChilds.Add(s);
                 return;
             }
-            rec(index+1,s+gamets1[index][0]+gamets2[index][0]);
+            temp = gamets1[index][0].ToString() + gamets2[index][0].ToString();
+            string.Concat(temp.OrderBy(c => c));
+            rec(index + 1, s + temp);
             if (gamets1[index].Length >= 2)
             {
-                rec(index + 1, s + gamets1[index][1] + gamets2[index][0]);
+                temp = gamets1[index][1].ToString() + gamets2[index][0].ToString();
+                string.Concat(temp.OrderBy(c => c));
+                rec(index + 1, s + temp);
             }
             if (gamets2[index].Length >= 2)
             {
-                rec(index + 1, s + gamets1[index][0] + gamets2[index][1]);
+                temp = gamets1[index][0].ToString() + gamets2[index][1].ToString();
+                string.Concat(temp.OrderBy(c => c));
+                rec(index + 1, s + temp);
             }
             if (gamets1[index].Length >= 2&& gamets2[index].Length >= 2)
             {
-                rec(index + 1, s + gamets1[index][1] + gamets2[index][1]);
+                temp = gamets1[index][1].ToString() + gamets2[index][1].ToString();
+                string.Concat(temp.OrderBy(c => c));
+                rec(index + 1, s + temp);
             }
             
         }

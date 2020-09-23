@@ -48,6 +48,7 @@
             this.generateButton.Text = "Generate";
             this.generateButton.UseVisualStyleBackColor = false;
             this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
+            this.generateButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EnterKeyDown);
             // 
             // Gen1
             // 
@@ -116,8 +117,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Gen1);
             this.Controls.Add(this.generateButton);
+            this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EnterKeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
