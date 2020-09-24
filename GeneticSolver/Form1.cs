@@ -95,24 +95,44 @@ namespace GeneticSolver
                 return;
             }
             temp = gamets1[index][0].ToString() + gamets2[index][0].ToString();
-            string.Concat(temp.OrderBy(c => c));
+            if (temp[1] < temp[0])
+            {
+                char[] charray = temp.ToCharArray();
+                Array.Reverse(charray);
+                temp = new string(charray);
+            }
             rec(index + 1, s + temp);
             if (gamets1[index].Length >= 2)
             {
                 temp = gamets1[index][1].ToString() + gamets2[index][0].ToString();
-                string.Concat(temp.OrderBy(c => c));
+                if (temp[1] < temp[0])
+                {
+                    char[] charray = temp.ToCharArray();
+                    Array.Reverse(charray);
+                    temp = new string(charray);
+                }
                 rec(index + 1, s + temp);
             }
             if (gamets2[index].Length >= 2)
             {
                 temp = gamets1[index][0].ToString() + gamets2[index][1].ToString();
-                string.Concat(temp.OrderBy(c => c));
+                if (temp[1] < temp[0])
+                {
+                    char[] charray = temp.ToCharArray();
+                    Array.Reverse(charray);
+                    temp = new string(charray);
+                }
                 rec(index + 1, s + temp);
             }
             if (gamets1[index].Length >= 2&& gamets2[index].Length >= 2)
             {
                 temp = gamets1[index][1].ToString() + gamets2[index][1].ToString();
-                string.Concat(temp.OrderBy(c => c));
+                if (temp[1] < temp[0])
+                {
+                    char[] charray = temp.ToCharArray();
+                    Array.Reverse(charray);
+                    temp = new string(charray);
+                }
                 rec(index + 1, s + temp);
             }
             
