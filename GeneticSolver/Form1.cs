@@ -12,6 +12,7 @@ namespace GeneticSolver
 {
     public partial class Form1 : Form
     {
+        Dictionary<string, int> dict = new Dictionary<string, int>();
         List<string> gamets1 = new List<string>();
         List<string> gamets2 = new List<string>();
         string gen1 = "", gen2 = "";
@@ -31,6 +32,8 @@ namespace GeneticSolver
         }
         private void Generate()
         {
+            
+            qwe = 0;
             listBox1.Items.Clear();
             listView1.Items.Clear();
             allChilds.Clear();
@@ -40,16 +43,16 @@ namespace GeneticSolver
             try
             {
                 Merge();
+                MessageBox.Show(qwe.ToString());
             }
             catch (IndexOutOfRangeException)
             {
                 MessageBox.Show("WTF?\nEnter Gens");
                 return;
             }
-            for (int c = 0; c < allChilds.Count; c++)
+            foreach(KeyValuePair<string, int> p in dict)
             {
-                listView1.Items.Add(allChilds[c]);
-                listBox1.Items.Add(allChilds[c]);
+                listBox1.Items.Add(p.Key + " " + ((double)p.Value)/allChilds.Count*100 + "%");
             }
         }
         void ExtractGamets()
@@ -86,11 +89,16 @@ namespace GeneticSolver
         {
             rec(0, "");
         }
+        string temp = "";
+        int qwe=0;
         void rec(int index, string s)
         {
-            string temp = "";
+            qwe++;
             if (index >= gamets1.Count)
             {
+                if(!dict.ContainsKey(s))
+                    dict.Add(s, 1);
+                else dict[s]++;
                 allChilds.Add(s);
                 return;
             }

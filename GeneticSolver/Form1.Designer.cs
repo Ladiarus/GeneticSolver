@@ -89,9 +89,9 @@
             // listView1
             // 
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(524, 134);
+            this.listView1.Location = new System.Drawing.Point(463, 134);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(250, 304);
+            this.listView1.Size = new System.Drawing.Size(311, 304);
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -102,7 +102,7 @@
             this.listBox1.Location = new System.Drawing.Point(12, 134);
             this.listBox1.Name = "listBox1";
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.Size = new System.Drawing.Size(139, 303);
+            this.listBox1.Size = new System.Drawing.Size(224, 303);
             this.listBox1.TabIndex = 7;
             // 
             // Form1
