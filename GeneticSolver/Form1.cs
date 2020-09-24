@@ -13,6 +13,7 @@ namespace GeneticSolver
     public partial class Form1 : Form
     {
         Dictionary<string, int> dict = new Dictionary<string, int>();
+        Dictionary<string, string> signs = new Dictionary<string, string>();
         List<string> gamets1 = new List<string>();
         List<string> gamets2 = new List<string>();
         string gen1 = "", gen2 = "";
@@ -23,7 +24,16 @@ namespace GeneticSolver
         }
         private void generateButton_Click(object sender, EventArgs e)
         {
+
             Generate();
+        }
+        private void EnterSigns(string currGen)
+        {
+            if (signs.ContainsKey(currGen))
+            {
+                signs[currGen] = textBox1.Text;
+            }
+            else signs.Add(currGen, textBox1.Text);
         }
         private void EnterKeyDown(object sender, KeyEventArgs e)
         {
@@ -35,7 +45,6 @@ namespace GeneticSolver
             
             qwe = 0;
             listBox1.Items.Clear();
-            listView1.Items.Clear();
             allChilds.Clear();
             gen1 = Gen1.Text;
             gen2 = Gen2.Text;
@@ -52,7 +61,7 @@ namespace GeneticSolver
             }
             foreach(KeyValuePair<string, int> p in dict)
             {
-                listBox1.Items.Add(p.Key + " " + ((double)p.Value)/allChilds.Count*100 + "%");
+                listBox1.Items.Add(p.Key + " " + ((double)p.Value)/allChilds.Count*100 + "% dodik");
             }
         }
         void ExtractGamets()
@@ -91,6 +100,12 @@ namespace GeneticSolver
         }
         string temp = "";
         int qwe=0;
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
         void rec(int index, string s)
         {
             qwe++;
