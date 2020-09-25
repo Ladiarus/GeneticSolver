@@ -48,6 +48,7 @@ namespace GeneticSolver
                 evth = new HashSet<char>(everything);
                 everything = new string(evth.ToArray<char>());
                 genLabel.Text = everything[0].ToString();
+                signs.Clear();
                 fwdClicksCount++;
             }
             }

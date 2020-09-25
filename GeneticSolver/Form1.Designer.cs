@@ -132,7 +132,7 @@
             this.Controls.Add(this.generateButton);
             this.KeyPreview = true;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Genetic Solver";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EnterKeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
