@@ -16,24 +16,51 @@ namespace GeneticSolver
         Dictionary<string, string> signs = new Dictionary<string, string>();
         List<string> gamets1 = new List<string>();
         List<string> gamets2 = new List<string>();
-        string gen1 = "", gen2 = "";
+        string gen1 = "", gen2 = "", everything;
         List<string> allChilds = new List<string>();
+        HashSet<char> evth;
+        int fwdClicksCount = 0;
+        int bwdClicksCount = 0;
         public Form1()
         {
             InitializeComponent();
         }
-        private void generateButton_Click(object sender, EventArgs e)
+        //googled something and found Application.ToString() method WTF actually
+          private void generateButton_Click(object sender, EventArgs e)
         {
 
-            Generate();
-        }
-        private void EnterSigns(string currGen)
-        {
-            if (signs.ContainsKey(currGen))
+
+            if (generateButton.Text == "Generate")
             {
-                signs[currGen] = textBox1.Text;
+                fwdClicksCount = 0;
+                bwdClicksCount = 0;
+                generateButton.Text = "Submit";
+                Generate();
             }
-            else signs.Add(currGen, textBox1.Text);
+            else
+            { 
+                generateButton.Text = "Generate";
+                listBox1.Items.Clear();
+                allChilds.Clear();
+                gen1 = Gen1.Text;
+                gen2 = Gen2.Text;
+                everything = gen1 + gen2;
+                evth = new HashSet<char>(everything);
+                everything = new string(evth.ToArray<char>());
+                genLabel.Text = everything[0].ToString();
+                fwdClicksCount++;
+            }
+            }
+        void EnterSigns()
+        {
+            
+            if (signs.ContainsKey(genLabel.Text))
+            {
+                if(textBox1.Text!="")
+                signs[genLabel.Text] = textBox1.Text;
+            }
+            else if (textBox1.Text != null) signs.Add(genLabel.Text, textBox1.Text);
+            
         }
         private void EnterKeyDown(object sender, KeyEventArgs e)
         {
@@ -44,10 +71,7 @@ namespace GeneticSolver
         {
             
             qwe = 0;
-            listBox1.Items.Clear();
-            allChilds.Clear();
-            gen1 = Gen1.Text;
-            gen2 = Gen2.Text;
+            dict.Clear();
             ExtractGamets();
             try
             {
@@ -61,7 +85,20 @@ namespace GeneticSolver
             }
             foreach(KeyValuePair<string, int> p in dict)
             {
-                listBox1.Items.Add(p.Key + " " + ((double)p.Value)/allChilds.Count*100 + "% dodik");
+                string description = "";
+                for(int i = 0; i < p.Key.Length;i+=2)
+                {
+                    try
+                    {
+                        description += signs[p.Key[i].ToString()] + " ";
+                    }
+                    catch (Exception) { }
+                }
+                listBox1.Items.Add(p.Key + " " + (((double)p.Value)/allChilds.Count*100).ToString() + "%\n");
+              
+                listBox1.Items.Add(description);
+                
+                description = "";
             }
         }
         void ExtractGamets()
@@ -101,8 +138,39 @@ namespace GeneticSolver
         string temp = "";
         int qwe=0;
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            if (fwdClicksCount > 0) 
+            { 
+                fwdClicksCount--;
+                textBox1.Clear(); 
+            }
+            try
+            {
+                genLabel.Text = everything[fwdClicksCount].ToString();
+            }
+            catch (Exception) { }
+            
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
+            
+            EnterSigns();
+            
+            try
+            {
+                genLabel.Text = everything[fwdClicksCount].ToString();
+            }
+            catch (Exception) { }
+            if (fwdClicksCount <= everything.Length - 1)
+            {
+                if (fwdClicksCount < everything.Length - 1)
+                    fwdClicksCount++;
+                textBox1.Clear();
+            }
+
 
         }
 
