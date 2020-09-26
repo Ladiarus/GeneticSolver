@@ -36,6 +36,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.genLabel = new System.Windows.Forms.Label();
+            this.searchTB = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // generateButton
@@ -71,10 +73,10 @@
             // 
             this.listBox1.ColumnWidth = 100;
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(483, 9);
+            this.listBox1.Location = new System.Drawing.Point(483, 48);
             this.listBox1.Name = "listBox1";
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.Size = new System.Drawing.Size(305, 433);
+            this.listBox1.Size = new System.Drawing.Size(305, 394);
             this.listBox1.TabIndex = 7;
             // 
             // textBox1
@@ -117,11 +119,33 @@
             this.genLabel.TabIndex = 10;
             this.genLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // searchTB
+            // 
+            this.searchTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.searchTB.Location = new System.Drawing.Point(483, 12);
+            this.searchTB.Name = "searchTB";
+            this.searchTB.Size = new System.Drawing.Size(275, 24);
+            this.searchTB.TabIndex = 11;
+            this.searchTB.TextChanged += new System.EventHandler(this.searchTB_TextChanged);
+            // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button3.Location = new System.Drawing.Point(764, 12);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(24, 24);
+            this.button3.TabIndex = 12;
+            this.button3.Text = "▶";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.searchTB);
             this.Controls.Add(this.genLabel);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -149,6 +173,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label genLabel;
+        private System.Windows.Forms.TextBox searchTB;
+        private System.Windows.Forms.Button button3;
     }
 }
 

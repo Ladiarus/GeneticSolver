@@ -18,3 +18,15 @@ C:\Users\Server 3\Documents\GeneticSolver\GeneticSolver\GeneticSolver\obj\Debug\
 C:\Users\Server 3\Documents\GeneticSolver\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.csproj.CoreCompileInputs.cache
 C:\Users\Server 3\Documents\GeneticSolver\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.exe
 C:\Users\Server 3\Documents\GeneticSolver\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.pdb
+D:\Unity\proj\GeneticSolver\GeneticSolver\bin\Debug\GeneticSolver.exe.config
+D:\Unity\proj\GeneticSolver\GeneticSolver\bin\Debug\GeneticSolver.exe
+D:\Unity\proj\GeneticSolver\GeneticSolver\bin\Debug\GeneticSolver.pdb
+D:\Unity\proj\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.csprojAssemblyReference.cache
+D:\Unity\proj\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.Form1.resources
+D:\Unity\proj\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.Properties.Resources.resources
+D:\Unity\proj\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.csproj.GenerateResource.cache
+D:\Unity\proj\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.csproj.CoreCompileInputs.cache
+D:\Unity\proj\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.exe
+D:\Unity\proj\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.pdb
+D:\Unity\proj\GeneticSolver\GeneticSolver\bin\Debug\PresentationFramework.dll
+D:\Unity\proj\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.csproj.CopyComplete

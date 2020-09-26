@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GeneticSolver
@@ -19,26 +14,54 @@ namespace GeneticSolver
         string gen1 = "", gen2 = "", everything;
         List<string> allChilds = new List<string>();
         HashSet<char> evth;
-        int fwdClicksCount = 0;
-        int bwdClicksCount = 0;
+        int fwdClicksCount = 0, searchClcksCount = -2;
         public Form1()
         {
             InitializeComponent();
         }
         //googled something and found Application.ToString() method WTF actually
-          private void generateButton_Click(object sender, EventArgs e)
+
+        void SearchInLB(string keyword)
         {
+            for (int i = 0; i < listBox1.Items.Count; i++)
+            {
+                for (int c = 0; c < listBox1.Items[i].ToString().Length - keyword.Length; c++)
+                {
+                    if (listBox1.Items[i].ToString().Substring(c, keyword.Length) == keyword)
+                    {
+                        listBox1.SetSelected(i, true);
+                        try
+                        {
+                            if (listBox1.Items[i - 1].ToString() != "\n")
+                            {
+                                listBox1.SetSelected(i - 1, true);
+                            }
+                            if (listBox1.Items[i + 1].ToString() != "\n")
+                            {
+                                listBox1.SetSelected(i + 1, true);
+                            }
+                        }
+                        catch (Exception) { }
 
+                    }
+                }
+            }
+        }
 
-            if (generateButton.Text == "Generate")
+        void generClick()
+        {
+            if (Gen1.Text == "" || Gen2.Text == "" || Gen2.Text.Length != Gen1.Text.Length)
+            {
+                MessageBox.Show("Input error", "Avtor dodik", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (generateButton.Text == "Generate")
             {
                 fwdClicksCount = 0;
-                bwdClicksCount = 0;
                 generateButton.Text = "Submit";
                 Generate();
             }
             else
-            { 
+            {
                 generateButton.Text = "Generate";
                 listBox1.Items.Clear();
                 allChilds.Clear();
@@ -48,46 +71,80 @@ namespace GeneticSolver
                 evth = new HashSet<char>(everything);
                 everything = new string(evth.ToArray<char>());
                 genLabel.Text = everything[0].ToString();
+                textBox1.Clear();
                 signs.Clear();
-                fwdClicksCount++;
+                searchClcksCount = -2;
+                listBox1.ClearSelected();
             }
-            }
+        }
+        private void generateButton_Click(object sender, EventArgs e)
+        {
+            generClick();
+        }
         void EnterSigns()
         {
-            
+
             if (signs.ContainsKey(genLabel.Text))
             {
-                if(textBox1.Text!="")
-                signs[genLabel.Text] = textBox1.Text;
+                if (textBox1.Text != "")
+                    signs[genLabel.Text] = textBox1.Text;
             }
             else if (textBox1.Text != null) signs.Add(genLabel.Text, textBox1.Text);
-            
+
         }
         private void EnterKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-                Generate();
+            {
+                switch (this.ActiveControl.Name)
+                {
+                    case "Gen1":
+                        Gen2.Focus();
+                        break;
+                    case "Gen2":
+                        generClick();
+                        textBox1.Focus();
+                        break;
+                    case "textBox1":
+                        if (fwdClicksCount != everything.Length - 1)
+                            button1_Click(button1, new EventArgs());
+                        else
+                        {
+                            generateButton_Click(generateButton, new EventArgs());
+                            genLabel.Focus();
+                        }
+                        break;
+                    case "searchTB":
+                        button3_Click(button3, new EventArgs());
+                        break;
+                    default:
+                        MessageBox.Show("не жми на энтер просто так сука");
+                        break;
+                }
+
+            }
         }
         private void Generate()
         {
-            
-            qwe = 0;
             dict.Clear();
             ExtractGamets();
+            EnterSigns();
+            textBox1.Clear();
+            genLabel.Text = "";
+            fwdClicksCount = 0;
             try
             {
                 Merge();
-                MessageBox.Show(qwe.ToString());
             }
             catch (IndexOutOfRangeException)
             {
                 MessageBox.Show("WTF?\nEnter Gens");
                 return;
             }
-            foreach(KeyValuePair<string, int> p in dict)
+            foreach (KeyValuePair<string, int> p in dict)
             {
                 string description = "";
-                for(int i = 0; i < p.Key.Length;i+=2)
+                for (int i = 0; i < p.Key.Length; i += 2)
                 {
                     try
                     {
@@ -95,18 +152,19 @@ namespace GeneticSolver
                     }
                     catch (Exception) { }
                 }
-                listBox1.Items.Add(p.Key + " " + (((double)p.Value)/allChilds.Count*100).ToString() + "%\n");
-              
+                listBox1.Items.Add(p.Key + " " + (((double)p.Value) / allChilds.Count * 100).ToString() + "%\n");
                 listBox1.Items.Add(description);
-                
+                listBox1.Items.Add("\n");
+
                 description = "";
             }
+            signs.Clear();
         }
         void ExtractGamets()
         {
             gamets1.Clear();
             gamets2.Clear();
-            
+
             for (int i = 0; i < gen1.Length; i++)
             {
                 if (i % 2 == 0)
@@ -114,9 +172,9 @@ namespace GeneticSolver
                     gamets1.Add("");
                     gamets1[i / 2] += gen1[i];
                 }
-                else if (gamets1[i/2][0] != gen1[i])
+                else if (gamets1[i / 2][0] != gen1[i])
                 {
-                    gamets1[i/2] += gen1[i];
+                    gamets1[i / 2] += gen1[i];
                 }
             }
             for (int i = 0; i < gen2.Length; i++)
@@ -137,50 +195,63 @@ namespace GeneticSolver
             rec(0, "");
         }
         string temp = "";
-        int qwe=0;
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (searchClcksCount == -2)
+            {
+                SearchInLB(searchTB.Text);
+            }
+            if (searchClcksCount < listBox1.SelectedIndices.Count - 2)
+                searchClcksCount += 2;
+            listBox1.TopIndex = listBox1.SelectedIndices[searchClcksCount];
+
+        }
+
+        private void searchTB_TextChanged(object sender, EventArgs e)
+        {
+            searchClcksCount = -2;
+            listBox1.ClearSelected();
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
-
-            if (fwdClicksCount > 0) 
-            { 
+            EnterSigns();
+            if (fwdClicksCount > 0)
+            {
                 fwdClicksCount--;
-                textBox1.Clear(); 
+                textBox1.Clear();
             }
             try
             {
                 genLabel.Text = everything[fwdClicksCount].ToString();
+                textBox1.Text = signs[genLabel.Text];
             }
             catch (Exception) { }
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
             EnterSigns();
-            
+            if (fwdClicksCount < everything.Length - 1)
+            {
+                fwdClicksCount++;
+                textBox1.Clear();
+            }
             try
             {
                 genLabel.Text = everything[fwdClicksCount].ToString();
+                textBox1.Text = signs[genLabel.Text];
             }
             catch (Exception) { }
-            if (fwdClicksCount <= everything.Length - 1)
-            {
-                if (fwdClicksCount < everything.Length - 1)
-                    fwdClicksCount++;
-                textBox1.Clear();
-            }
-
-
         }
 
         void rec(int index, string s)
         {
-            qwe++;
             if (index >= gamets1.Count)
             {
-                if(!dict.ContainsKey(s))
+                if (!dict.ContainsKey(s))
                     dict.Add(s, 1);
                 else dict[s]++;
                 allChilds.Add(s);
@@ -216,7 +287,7 @@ namespace GeneticSolver
                 }
                 rec(index + 1, s + temp);
             }
-            if (gamets1[index].Length >= 2&& gamets2[index].Length >= 2)
+            if (gamets1[index].Length >= 2 && gamets2[index].Length >= 2)
             {
                 temp = gamets1[index][1].ToString() + gamets2[index][1].ToString();
                 if (temp[1] < temp[0])
@@ -227,7 +298,7 @@ namespace GeneticSolver
                 }
                 rec(index + 1, s + temp);
             }
-            
+
         }
     }
 }
