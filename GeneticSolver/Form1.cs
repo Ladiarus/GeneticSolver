@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace GeneticSolver
 {
@@ -23,27 +24,43 @@ namespace GeneticSolver
 
         void SearchInLB(string keyword)
         {
+            List<string> keywords = new List<string>();
+            string addable = "";
+            for (int i = 0; i < keyword.Length; i++)
+            {
+                if (keyword[i] == ' ' || keyword[i] == ',' || i == keyword.Length - 1)
+                {
+                    keywords.Add(addable);
+                    addable = "";
+                }
+                else addable += keyword[i];
+            }
             for (int i = 0; i < listBox1.Items.Count; i++)
             {
-                for (int c = 0; c < listBox1.Items[i].ToString().Length - keyword.Length; c++)
+                bool check = true;
+                foreach(string c in keywords)
                 {
-                    if (listBox1.Items[i].ToString().Substring(c, keyword.Length) == keyword)
+                    if (!listBox1.Items[i].ToString().Contains(c))
                     {
-                        listBox1.SetSelected(i, true);
-                        try
-                        {
-                            if (listBox1.Items[i - 1].ToString() != "\n")
-                            {
-                                listBox1.SetSelected(i - 1, true);
-                            }
-                            if (listBox1.Items[i + 1].ToString() != "\n")
-                            {
-                                listBox1.SetSelected(i + 1, true);
-                            }
-                        }
-                        catch (Exception) { }
-
+                        check = false;
+                        break;
                     }
+                }
+                if (check)
+                {
+                    listBox1.SetSelected(i, true);
+                    try
+                    {
+                        if (listBox1.Items[i - 1].ToString() != "\n")
+                        {
+                            listBox1.SetSelected(i - 1, true);
+                        }
+                        if (listBox1.Items[i + 1].ToString() != "\n")
+                        {
+                            listBox1.SetSelected(i + 1, true);
+                        }
+                    }
+                    catch (Exception) { }
                 }
             }
         }
@@ -200,7 +217,7 @@ namespace GeneticSolver
         {
             if (searchClcksCount == -2)
             {
-                SearchInLB(searchTB.Text);
+                SearchInLB(searchTB.Text+" ");
             }
             if (searchClcksCount < listBox1.SelectedIndices.Count - 2)
                 searchClcksCount += 2;
