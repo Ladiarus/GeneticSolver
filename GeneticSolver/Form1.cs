@@ -2,20 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace GeneticSolver
 {
+    enum FilterType
+    {
+        Alphabet,
+        FormFactor,
+        Chance
+    }
     public partial class Form1 : Form
     {
         Dictionary<string, int> dict = new Dictionary<string, int>();
         Dictionary<string, string> signs = new Dictionary<string, string>();
+        List<GybridInfo> GybridsList = new List<GybridInfo>();
+
         List<string> gamets1 = new List<string>();
         List<string> gamets2 = new List<string>();
-        string gen1 = "", gen2 = "", everything;
+        string gen1 = "", gen2 = "", everything, temp = "";
         List<string> allChilds = new List<string>();
         HashSet<char> evth;
         int fwdClicksCount = 0, searchClcksCount = -2;
+        bool filterDirectionUp = false;
         public Form1()
         {
             InitializeComponent();
@@ -38,7 +46,7 @@ namespace GeneticSolver
             for (int i = 0; i < listBox1.Items.Count; i++)
             {
                 bool check = true;
-                foreach(string c in keywords)
+                foreach (string c in keywords)
                 {
                     if (!listBox1.Items[i].ToString().Contains(c))
                     {
@@ -113,6 +121,7 @@ namespace GeneticSolver
         {
             if (e.KeyCode == Keys.Enter)
             {
+                e.SuppressKeyPress = true;
                 switch (this.ActiveControl.Name)
                 {
                     case "Gen1":
@@ -135,7 +144,8 @@ namespace GeneticSolver
                         button3_Click(button3, new EventArgs());
                         break;
                     default:
-                        MessageBox.Show("не жми на энтер просто так сука");
+                        
+                        MessageBox.Show("Не жми на энтер просто так", "Avtor dodik", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                 }
 
@@ -169,12 +179,17 @@ namespace GeneticSolver
                     }
                     catch (Exception) { }
                 }
-                listBox1.Items.Add(p.Key + " " + (((double)p.Value) / allChilds.Count * 100).ToString() + "%\n");
-                listBox1.Items.Add(description);
-                listBox1.Items.Add("\n");
-
-                description = "";
+                GybridsList.Add(new GybridInfo()
+                {
+                    name = p.Key,
+                    count = p.Value,
+                    formFactor = description,
+                    chance = ((double)p.Value) / allChilds.Count * 100
+                });
             }
+            countLabel.Text = allChilds.Count.ToString() + " childs, " +
+                GybridsList.Count.ToString() + " different";
+            FilterSort();
             signs.Clear();
         }
         void ExtractGamets()
@@ -211,13 +226,12 @@ namespace GeneticSolver
         {
             rec(0, "");
         }
-        string temp = "";
 
         private void button3_Click(object sender, EventArgs e)
         {
             if (searchClcksCount == -2)
             {
-                SearchInLB(searchTB.Text+" ");
+                SearchInLB(searchTB.Text + " ");
             }
             if (searchClcksCount < listBox1.SelectedIndices.Count - 2)
                 searchClcksCount += 2;
@@ -229,6 +243,64 @@ namespace GeneticSolver
         {
             searchClcksCount = -2;
             listBox1.ClearSelected();
+
+        }
+
+        private void filterButton_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+            filterDirectionUp = !filterDirectionUp;
+            if (filterDirectionUp)
+                filterButton.Text = "↑";
+            else
+                filterButton.Text = "↓";
+            FilterSort();
+        }
+
+        void FilterSort()
+        {
+            listBox1.Items.Clear();
+            List<GybridInfo> TempList = new List<GybridInfo>(GybridsList);
+            switch ((FilterType)Enum.Parse(typeof(FilterType), filterComboBox.Text))
+            {
+                case FilterType.Alphabet:
+                    TempList.Sort(AlphabetComparer);
+                    break;
+                case FilterType.FormFactor:
+                    TempList.Sort(FormFactorComparer);
+                    break;
+                case FilterType.Chance:
+                    TempList.Sort(ChanceComparer);
+                    break;
+            }
+            if (!filterDirectionUp)
+            {
+                TempList.Reverse();
+            }
+            foreach (GybridInfo info in TempList)
+            {
+                listBox1.Items.Add(info.name);
+                listBox1.Items.Add(info.formFactor + info.chance.ToString() + "% " + info.count.ToString());
+                listBox1.Items.Add("\n");
+            }
+        }
+        #region Comparers
+        int AlphabetComparer(GybridInfo a, GybridInfo b)
+        {
+            return a.name.CompareTo(b.name);
+        }
+        int FormFactorComparer(GybridInfo a, GybridInfo b)
+        {
+            return a.formFactor.CompareTo(b.formFactor);
+        }
+        int ChanceComparer(GybridInfo a, GybridInfo b)
+        {
+            return a.chance.CompareTo(b.chance);
+        }
+        #endregion
+        private void filterComboBox_TextChanged(object sender, EventArgs e)
+        {
+            FilterSort();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -269,8 +341,13 @@ namespace GeneticSolver
             if (index >= gamets1.Count)
             {
                 if (!dict.ContainsKey(s))
+                {
                     dict.Add(s, 1);
-                else dict[s]++;
+                }
+                else
+                {
+                    dict[s] += 1;
+                }
                 allChilds.Add(s);
                 return;
             }
