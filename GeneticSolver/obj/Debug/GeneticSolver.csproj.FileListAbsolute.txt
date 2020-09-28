@@ -32,3 +32,5 @@ D:\Unity\proj\GeneticSolver\GeneticSolver\bin\Debug\PresentationFramework.dll
 D:\Unity\proj\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.csproj.CopyComplete
 C:\Users\Ярослав\Documents\Visual Studio 2019\Projects\GeneticSolver\GeneticSolver\bin\Debug\PresentationFramework.dll
 C:\Users\Ярослав\Documents\Visual Studio 2019\Projects\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.csproj.CopyComplete
+C:\Users\Server 3\Documents\GeneticSolver\GeneticSolver\GeneticSolver\bin\Debug\PresentationFramework.dll
+C:\Users\Server 3\Documents\GeneticSolver\GeneticSolver\GeneticSolver\obj\Debug\GeneticSolver.csproj.CopyComplete

@@ -63,12 +63,22 @@ namespace GeneticSolver
                         {
                             listBox1.SetSelected(i - 1, true);
                         }
+                    }catch (Exception)
+                    {
+                        //listBox1.ClearSelected();
+                    }
+                    try
+                    {
+                        
                         if (listBox1.Items[i + 1].ToString() != "\n")
                         {
                             listBox1.SetSelected(i + 1, true);
                         }
                     }
-                    catch (Exception) { }
+                    catch (Exception) 
+                    {
+                        //listBox1.ClearSelected();
+                    }
                 }
             }
         }
@@ -145,7 +155,7 @@ namespace GeneticSolver
                         break;
                     default:
                         
-                        MessageBox.Show("Не жми на энтер просто так", "Avtor dodik", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Не жми на Enter просто так", "Avtor dodik", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                 }
 
@@ -187,8 +197,8 @@ namespace GeneticSolver
                     chance = ((double)p.Value) / allChilds.Count * 100
                 });
             }
-            countLabel.Text = allChilds.Count.ToString() + " childs, " +
-                GybridsList.Count.ToString() + " different";
+            countLabel.Text = allChilds.Count.ToString() + (allChilds.Count>1?" childs, " + GybridsList.Count.ToString() 
+                + " different": " child") ;
             FilterSort();
             signs.Clear();
         }
@@ -235,7 +245,15 @@ namespace GeneticSolver
             }
             if (searchClcksCount < listBox1.SelectedIndices.Count - 2)
                 searchClcksCount += 2;
-            listBox1.TopIndex = listBox1.SelectedIndices[searchClcksCount];
+            try
+            {
+                listBox1.TopIndex = listBox1.SelectedIndices[searchClcksCount];
+            }
+            catch (Exception)
+            {
+                listBox1.ClearSelected();
+                MessageBox.Show("Item not found", "Error");
+            }
 
         }
 
