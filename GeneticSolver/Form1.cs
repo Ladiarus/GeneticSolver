@@ -23,7 +23,7 @@ namespace GeneticSolver
         List<string> allChilds = new List<string>();
         HashSet<char> evth;
         int fwdClicksCount = 0, searchClcksCount = -2;
-        bool filterDirectionUp = false;
+        bool filterDirectionUp = false, isCrossingover = false;
         public Form1()
         {
             InitializeComponent();
@@ -164,6 +164,7 @@ namespace GeneticSolver
         private void Generate()
         {
             dict.Clear();
+            GybridsList.Clear();
             ExtractGamets();
             EnterSigns();
             textBox1.Clear();
@@ -178,6 +179,8 @@ namespace GeneticSolver
                 MessageBox.Show("WTF?\nEnter Gens");
                 return;
             }
+            countLabel.Text = allChilds.Count.ToString() + (allChilds.Count > 1 ? " childs, " + GybridsList.Count.ToString()
+                + " different" : " child");
             foreach (KeyValuePair<string, int> p in dict)
             {
                 string description = "";
@@ -197,8 +200,7 @@ namespace GeneticSolver
                     chance = ((double)p.Value) / allChilds.Count * 100
                 });
             }
-            countLabel.Text = allChilds.Count.ToString() + (allChilds.Count>1?" childs, " + GybridsList.Count.ToString() 
-                + " different": " child") ;
+            
             FilterSort();
             signs.Clear();
         }
@@ -297,9 +299,20 @@ namespace GeneticSolver
             }
             foreach (GybridInfo info in TempList)
             {
-                listBox1.Items.Add(info.name);
-                listBox1.Items.Add(info.formFactor + info.chance.ToString() + "% " + info.count.ToString());
-                listBox1.Items.Add("\n");
+                if (isCrossingover)
+                {
+                    listBox1.Items.Add(info.name);
+                    
+                    //listBox1.Items.Add(info.formFactor + info.chance.ToString() + "% " + info.count.ToString()); 
+                    //recount chance and count
+                    listBox1.Items.Add("\n");
+                }
+                else
+                {
+                    listBox1.Items.Add(info.name);
+                    listBox1.Items.Add(info.formFactor + info.chance.ToString() + "% " + info.count.ToString());
+                    listBox1.Items.Add("\n");
+                }
             }
         }
         #region Comparers
@@ -316,6 +329,24 @@ namespace GeneticSolver
             return a.chance.CompareTo(b.chance);
         }
         #endregion
+        private void crossingoverTB_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void crossingoverCB_CheckedChanged(object sender, EventArgs e)
+        {
+            isCrossingover = !isCrossingover;
+            crossingoverTB.Focus();
+        }
+
         private void filterComboBox_TextChanged(object sender, EventArgs e)
         {
             FilterSort();
